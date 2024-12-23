@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Reference Include="Microsoft.FlightSimulator.SimConnect">
+			<HintPath>..\..\..\..\..\MSFS SDK\SimConnect SDK\lib\managed\Microsoft.FlightSimulator.SimConnect.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+	</ItemGroup>
+
+	<!-- Copy on build is required because the SimConnect.dll is not copied to the output folder by default -->
+	<!-- See: https://devsupport.flightsimulator.com/t/microsoft-flightsimulator-simconnect-dll-vs-simconnect-dll/4669/3 -->
+	<Target Name="CopySimConnectDll" AfterTargets="Build">
+		<PropertyGroup>
+			<SimConnectSdkPath>..\..\..\..\..\MSFS SDK\SimConnect SDK\lib</SimConnectSdkPath>
+		</PropertyGroup>
+		<ItemGroup>
+			<SimConnectAssemblies Include="$(SimConnectSdkPath)\SimConnect.dll" />
+		</ItemGroup>
+		<Copy SourceFiles="@(SimConnectAssemblies)" DestinationFolder="$(OutputPath)" />
+	</Target>
+</Project>
